@@ -4,6 +4,10 @@ const github = danger.github
 const baseBranchName = github.pr.base.ref
 const branchName = github.pr.head.ref
 
-message(baseBranchName)
-message(branchName)
+if(baseBranchName === 'main' || baseBranchName === 'master'){
+    // PR branch must start with hotfix or release
+    if(!branchName.startWith('hotfix/') || !branchName.startWith('release/')){
+        fail("You can't merge this branch into main.")
+    }
+}
 
