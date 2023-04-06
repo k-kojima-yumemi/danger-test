@@ -15,7 +15,7 @@ jobs:
         run: |
           gem install bundler
           bundle init
-          gem 'danger'
+          gem install 'danger'
           bundle install --jobs 4 --retry 3
       - name: Danger
         run: bundle exec danger ci
