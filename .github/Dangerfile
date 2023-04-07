@@ -5,3 +5,8 @@ merging = github.branch_for_head
 
 message("This pr merge #{merging} into #{base}")
 
+if base == "main" || base == "master"
+    if !merging.start_with?("hotfix/") && !merging.start_with("release/")
+        fail("You can't merge this branch into main/master")
+    end
+end
