@@ -14,7 +14,7 @@ jobs:
       - name: Install
         run: yarn add danger
       - name: Danger
-        run: yarn danger ci --fail-on-errors=true --dangerfile=.github/dangerfile.js
+        run: yarn danger --fail-on-errors=true --dangerfile=.github/dangerfile.js
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
           DANGER_DISABLE_TRANSPILATION: true
