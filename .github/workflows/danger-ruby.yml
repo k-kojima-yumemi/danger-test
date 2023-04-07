@@ -7,11 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
       - name: Dump GitHub context
         id: github_context_step
         env:
           context: ${{ toJSON(github) }}
-        run: echo $context
+        run: echo Hello
       - name: Show remotes
         run: git show-branch -r
       - name: Show locals
