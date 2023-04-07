@@ -1,7 +1,7 @@
 message("Working!")
 
-baseBranchName = github.pr.base.ref
-branchName = github.pr.head.ref
+base = github.branch_for_base
+merging = github.branch_for_head
 
-message("This pr merge #{branchName} into #{baseBranchName}")
+message("This pr merge #{merging} into #{base}")
 
