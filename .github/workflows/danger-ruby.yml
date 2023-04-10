@@ -1,5 +1,10 @@
 name: "Danger Ruby"
-on: [pull_request]
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
 
 jobs:
   build:
@@ -7,6 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Dump GitHub context
+        id: github_context_step
+        env:
+          context: ${{ toJSON(github) }}
+        run: echo Hello
+      - name: Dump event info
+        run: echo Hello2
+        env:
+          context: ${{ toJSON(github.event) }}
+      - name: Show remotes
+        run: git show-branch -r
+      - name: Show locals
+        run: git show-branch
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
