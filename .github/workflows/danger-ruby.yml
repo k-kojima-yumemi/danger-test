@@ -1,5 +1,10 @@
 name: "Danger Ruby"
-on: [pull_request]
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
 
 jobs:
   build:
@@ -14,6 +19,10 @@ jobs:
         env:
           context: ${{ toJSON(github) }}
         run: echo Hello
+      - name: Dump event info
+        run: echo Hello2
+        env:
+          context: ${{ toJSON(github.event) }}
       - name: Show remotes
         run: git show-branch -r
       - name: Show locals
