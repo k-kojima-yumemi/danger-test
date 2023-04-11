@@ -10,3 +10,6 @@ if base == "main" || base == "master"
         fail("You can't merge this branch into main/master")
     end
 end
+
+p `git branch`
+p `git show-branch`
