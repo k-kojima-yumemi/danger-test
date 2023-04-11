@@ -25,6 +25,8 @@ jobs:
           context: ${{ toJSON(github.event) }}
       - name: Switch branch
         run: git checkout ${{ github.head_ref }}
+      - name: Check reflog
+        run: git reflog
       - name: Track all
         run: |
           current_branch=$(git rev-parse --abbrev-ref HEAD)
