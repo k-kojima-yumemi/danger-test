@@ -23,7 +23,7 @@ p `git show-branch`
             !branch.start_with?("danger_")
             branch != merging &&
             branch != "main" &&
-            branch != "master"
+            branch != "master" &&
             !branch.include?("feature/")
     }
     p "Filter: #{other}"
