@@ -15,7 +15,7 @@ p `git branch`
 p `git show-branch`
 
 `git log --pretty=%H`.split("\n").each do |hash|
-    other = `git branch --contains #{hash} | grep -v "danger_base" | grep -v "danger_head" | grep -v "#{merging}" | sed -e "s/ //g"`
+    other = `git branch --contains #{hash} | grep -v "danger_base" | grep -v "danger_head" | grep -v "#{merging}" | sed -e "s/ //g"`.split("\n")
     unless other.empty?()
         p other
         break
