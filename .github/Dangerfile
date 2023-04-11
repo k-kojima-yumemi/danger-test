@@ -20,7 +20,7 @@ p `git show-branch`
     other = other.select { |branch|
             !branch.empty?() &&
             # danger でdanger_base とdanger_headが追加されているので無視する
-            !branch.start_with?("danger_")
+            !branch.start_with?("danger_") &&
             branch != merging &&
             branch != "main" &&
             branch != "master" &&
