@@ -29,8 +29,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo "Line 1\r\nLine2\nL3 [Link](https://github.com)" > msg.txt
-          gh pr comment ${{ github.event.pull_request.html_url }} -F - < msg.txt
+          gh pr comment ${{ github.event.pull_request.html_url }} -F - <<EOF
+          Line 1
+          [Link to GitHub](https://github.com)
+          Line 3
+          EOF
       - name: Check reflog
         run: git reflog
       - name: Track all
