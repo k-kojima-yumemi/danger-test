@@ -52,3 +52,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DANGER_DISABLE_TRANSPILATION: true
+      - name: Test ML comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.html_url }} -b \
+          "Line 1\r\nLine2"
