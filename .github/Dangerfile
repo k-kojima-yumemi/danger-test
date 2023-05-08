@@ -10,3 +10,25 @@ if base == "main" || base == "master"
         fail("You can't merge this branch into main/master")
     end
 end
+
+p `git branch`
+p `git show-branch`
+
+`git log --pretty=%H`.split("\n").each do |hash|
+    other = `git branch --contains #{hash} | sed -e "s/ //g" -e "s/*//"`.split("\n")
+    p "Check #{hash}, result #{other}"
+    other = other.select { |branch|
+            !branch.empty?() &&
+            # danger でdanger_base とdanger_headが追加されているので無視する
+            !branch.start_with?("danger_") &&
+            branch != merging &&
+            branch != "main" &&
+            branch != "master" &&
+            !branch.include?("feature/")
+    }
+    p "Filter: #{other}"
+    unless other.empty?()
+        p other
+        break
+    end
+end
