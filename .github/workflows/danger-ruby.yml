@@ -7,6 +7,21 @@ on:
       - edited
 
 jobs:
+  show-env:
+    name: Get context
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: GitHub Context
+        env:
+          context: ${{github}}
+        run: echo $context | jq
+      - name: Ref
+        run: |
+          echo "Head: ${{github.head_ref}}"
+          echo "Base: ${{github.base_ref}}"
+          echo "Ref: ${{github.ref}}"
+          echo "Ref name: ${{github.ref_name}}"
   build:
     name: Danger Ruby
     runs-on: ubuntu-latest
@@ -33,6 +48,10 @@ jobs:
           Line 1
           [Link to GitHub](https://github.com)
           Line 3
+          "Head: ${{github.head_ref}}"
+          "Base: ${{github.base_ref}}"
+          "Ref: ${{github.ref}}"
+          "Ref name: ${{github.ref_name}}"
           EOF
       - name: Check reflog
         run: git reflog
