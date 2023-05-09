@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: GitHub Context
         env:
-          context: ${{github}}
+          context: '${{github}}'
         run: echo $context | jq
       - name: Ref
         run: |
@@ -48,10 +48,10 @@ jobs:
           Line 1
           [Link to GitHub](https://github.com)
           Line 3
-          "Head: ${{github.head_ref}}"
-          "Base: ${{github.base_ref}}"
-          "Ref: ${{github.ref}}"
-          "Ref name: ${{github.ref_name}}"
+          Head: ${{github.head_ref}}
+          Base: ${{github.base_ref}}
+          Ref: ${{github.ref}}
+          Ref name: ${{github.ref_name}}
           EOF
       - name: Check reflog
         run: git reflog
