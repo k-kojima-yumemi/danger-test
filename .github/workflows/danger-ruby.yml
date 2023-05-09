@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: GitHub Context
         env:
-          context: '${{fromJson(github)}}'
+          context: ${{fromJson(github)}}
         run: echo $context | jq
       - name: Ref
         run: |
