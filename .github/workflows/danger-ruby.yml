@@ -22,6 +22,7 @@ jobs:
           echo "Base: ${{github.base_ref}}"
           echo "Ref: ${{github.ref}}"
           echo "Ref name: ${{github.ref_name}}"
+          echo "Repo name: ${{github.event.pull_request.head.ref.name}}"
   build:
     name: Danger Ruby
     runs-on: ubuntu-latest
