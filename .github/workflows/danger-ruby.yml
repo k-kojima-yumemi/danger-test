@@ -14,8 +14,8 @@ jobs:
     steps:
       - name: GitHub Context
         env:
-          context: ${{fromJson(github)}}
-        run: echo $context | jq
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "${GITHUB_CONTEXT}" | jq
       - name: Ref
         run: |
           echo "Head: ${{github.head_ref}}"
