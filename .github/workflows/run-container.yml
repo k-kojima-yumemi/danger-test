@@ -1,0 +1,15 @@
+name: Container Action
+on: workflow_dispatch
+
+jobs:
+  tbls:
+    runs-on: ubuntu-latest
+    steps:
+      - name: version
+        uses: docker://ghcr.io/k1low/tbls:latest
+        with:
+            arg: --version
+      - name: help
+        uses: docker://ghcr.io/k1low/tbls:latest
+        with:
+            arg: --help
