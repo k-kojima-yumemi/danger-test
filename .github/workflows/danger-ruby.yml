@@ -7,6 +7,22 @@ on:
       - edited
 
 jobs:
+  show-env:
+    name: Get context
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: GitHub Context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "${GITHUB_CONTEXT}" | jq
+      - name: Ref
+        run: |
+          echo "Head: ${{github.head_ref}}"
+          echo "Base: ${{github.base_ref}}"
+          echo "Ref: ${{github.ref}}"
+          echo "Ref name: ${{github.ref_name}}"
+          echo "Repo name: ${{github.event.pull_request.head.repo.name}}"
   build:
     name: Danger Ruby
     runs-on: ubuntu-latest
@@ -23,6 +39,32 @@ jobs:
         run: echo Hello2
         env:
           context: ${{ toJSON(github.event) }}
+      - name: Switch branch
+        run: git checkout ${{ github.head_ref }}
+      - name: Test ML comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.html_url }} -F - <<EOF
+          Line 1
+          [Link to GitHub](https://github.com)
+          Line 3
+          Head: ${{github.head_ref}}
+          Base: ${{github.base_ref}}
+          Ref: ${{github.ref}}
+          Ref name: ${{github.ref_name}}
+          EOF
+      - name: Check reflog
+        run: git reflog
+      - name: Track all
+        run: |
+          current_branch=$(git rev-parse --abbrev-ref HEAD)
+          git branch -r |\
+            grep -v '\->' |\
+            grep -v "[^/]\+/${current_branch}$" |\
+            grep -v "pull/[0-9]\+/merge" |\
+            sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" |\
+            while read -r remote; do git branch --track "${remote#origin/}" "$remote" || : ; done
       - name: Show remotes
         run: git show-branch -r
       - name: Show locals
@@ -30,7 +72,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7'
+          ruby-version: '3.1'
       - name: Install
         run: |
           gem install 'danger'
