@@ -16,7 +16,8 @@ jobs:
       - name: Python version
         uses: docker://python:latest
         with:
-          args: --version
+          entrypoint: /bin/sh
+          args: python --version
       - name: Python OS info
         uses: docker://python:latest
         with:
