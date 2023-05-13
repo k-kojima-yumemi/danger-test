@@ -17,9 +17,9 @@ jobs:
         uses: docker://python:latest
         with:
           entrypoint: /bin/sh
-          args: python --version
+          args: /usr/local/bin/python --version
       - name: Python OS info
         uses: docker://python:latest
         with:
           entrypoint: /bin/sh
-          args: cat /etc/os-release
+          args: /bin/cat /etc/os-release
