@@ -18,3 +18,5 @@ jobs:
     steps:
       - run: echo ${{ vars.VARIABLE1 }}
       - run: echo ${{ secrets.SECRET1 }}
+      - run: echo "::add-mask::${{ vars.VARIABLE1 }}"
+      - run: echo ${{ vars.VARIABLE1 }}
