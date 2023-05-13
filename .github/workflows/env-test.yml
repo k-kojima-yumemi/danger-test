@@ -24,11 +24,14 @@ jobs:
           branch="${{ github.ref_name }}"
           env_name="${branch##*/}"
           echo "$env_name"
-          echo "out=$env_name" >> $GITHUB_OUTPUT
+          echo "out=$env_name" >> "$GITHUB_OUTPUT"
   deployment:
     runs-on: ubuntu-latest
     needs: environment-name
     environment: ${{ needs.environment-name.outputs.env-name }}
     steps:
-      - run: echo ${{ vars.VARIABLE1 }}
-      - run: echo ${{ secrets.SECRET1 }}
+      - run: echo ${{ needs.environment-name.outputs.env-name }}
+      - name: Variable
+        run: echo ${{ vars.VARIABLE1 }}
+      - name: Secret
+        run: echo ${{ secrets.SECRET1 }}
