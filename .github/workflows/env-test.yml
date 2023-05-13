@@ -35,3 +35,7 @@ jobs:
         run: echo ${{ vars.VARIABLE1 }}
       - name: Secret
         run: echo ${{ secrets.SECRET1 }}
+      - run: |
+          secret="Generated secret"
+          echo "::add-mask::${secret}"
+          echo "${secret}"
