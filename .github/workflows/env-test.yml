@@ -12,12 +12,29 @@ jobs:
     steps:
       - run: echo ${{ github.ref_name }}
 
+  environment-name: 
+    runs-on: ubuntu-latest
+    outputs: 
+      env-name: ${{ steps.name.outputs.out }}
+    steps:
+      - name: Get name
+        id: name
+        run: |
+          echo "Hello"
+          branch="${{ github.ref_name }}"
+          env_name="${branch##*/}"
+          echo "$env_name"
+          echo "out=$env_name" >> "$GITHUB_OUTPUT"
   deployment:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    needs: environment-name
+    environment: ${{ needs.environment-name.outputs.env-name }}
     steps:
-      - run: echo ${{ vars.VARIABLE1 }}
-      - run: echo ${{ secrets.SECRET1 }}
+      - run: echo ${{ needs.environment-name.outputs.env-name }}
+      - name: Variable
+        run: echo ${{ vars.VARIABLE1 }}
+      - name: Secret
+        run: echo ${{ secrets.SECRET1 }}
       - run: |
           secret="Generated secret"
           echo "::add-mask::${secret}"
