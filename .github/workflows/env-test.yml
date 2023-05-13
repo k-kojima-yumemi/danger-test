@@ -1,0 +1,20 @@
+name: Environment
+on:
+  push:
+    branches:
+      - migrate/japan
+      - migrate/korea
+  workflow_dispatch:
+
+jobs:
+  check-variable:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.ref_name }}
+
+  deployment:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name }}
+    steps:
+      - run: echo ${{ vars.VARIABLE1 }}
+      - run: echo ${{ secrets.SECRET1 }}
