@@ -13,11 +13,6 @@ jobs:
         uses: docker://ghcr.io/k1low/tbls:latest
         with:
           args: doc --help
-      - name: tbls OS info
-        uses: docker://ghcr.io/k1low/tbls:latest
-        with:
-          entrypoint: /bin/sh
-          args: cat /etc/os-release || true
       - name: Python version
         uses: docker://python:latest
         with:
