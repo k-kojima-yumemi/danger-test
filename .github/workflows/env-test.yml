@@ -15,7 +15,7 @@ jobs:
   environment-name: 
     runs-on: ubuntu-latest
     outputs: 
-      env-name: steps.name.outputs.out
+      env-name: ${{ steps.name.outputs.out }}
     steps:
       - name: Get name
         id: name
