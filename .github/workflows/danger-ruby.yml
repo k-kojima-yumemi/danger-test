@@ -45,7 +45,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr comment ${{ github.event.pull_request.html_url }} -F - <<EOF
+          cat <<EOF >body.txt
+          <!-- COMMENT_FOR_TEST -->
           Line 1
           [Link to GitHub](https://github.com)
           Line 3
@@ -53,7 +54,20 @@ jobs:
           Base: ${{github.base_ref}}
           Ref: ${{github.ref}}
           Ref name: ${{github.ref_name}}
+          Run URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
           EOF
+
+          node_comment_id=$(gh pr view ${{ github.event.pull_request.html_url }} --json comments |\
+          jq -r 'first(.comments | .[] | select(.author.login = "github-actions") | select(.body | contains("COMMENT_FOR_TEST"))) | .id')
+          echo "Detected comment id: ${node_comment_id}"
+          if test -z "$node_comment_id" ; then
+            gh pr comment ${{ github.event.pull_request.html_url }} -F body.txt
+          else
+            comment_id=$(gh api /repos/{owner}/{repo}/issues/comments | jq -r '.[] | select(.node_id == "'$node_comment_id'") | .id')
+            echo "$comment_id"
+            gh api -X GET "/repos/{owner}/{repo}/issues/comments/${comment_id}"
+            gh api -X PATCH "/repos/{owner}/{repo}/issues/comments/${comment_id}" -F 'body=@body.txt'
+          fi
       - name: Check reflog
         run: git reflog
       - name: Track all
@@ -81,3 +95,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DANGER_DISABLE_TRANSPILATION: true
+          RUN_URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}

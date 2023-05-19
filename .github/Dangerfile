@@ -2,8 +2,10 @@ message("Working!")
 
 base = github.branch_for_base
 merging = github.branch_for_head
+run_url = ENV["RUN_URL"]
 
 message("This pr merge #{merging} into #{base}")
+message("Run URL: #{run_url}")
 
 if base == "main" || base == "master"
     unless merging.start_with?("hotfix/") || merging.start_with?("release/")
