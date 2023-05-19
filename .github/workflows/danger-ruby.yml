@@ -45,7 +45,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr comment ${{ github.event.pull_request.html_url }} -F - <<EOF
+          gh pr comment ${{ github.event.pull_request.html_url }} --edit-last -F - <<EOF
           Line 1
           [Link to GitHub](https://github.com)
           Line 3
@@ -53,6 +53,7 @@ jobs:
           Base: ${{github.base_ref}}
           Ref: ${{github.ref}}
           Ref name: ${{github.ref_name}}
+          Run URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
           EOF
       - name: Check reflog
         run: git reflog
@@ -81,3 +82,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DANGER_DISABLE_TRANSPILATION: true
+          RUN_URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
