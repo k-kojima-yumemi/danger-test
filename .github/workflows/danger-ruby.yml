@@ -45,7 +45,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr comment ${{ github.event.pull_request.html_url }} --edit-last -F - <<EOF
+          cat <<EOF >body.txt
+          <!-- COMMENT_FOR_TEST -->
           Line 1
           [Link to GitHub](https://github.com)
           Line 3
@@ -55,6 +56,15 @@ jobs:
           Ref name: ${{github.ref_name}}
           Run URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
           EOF
+
+          comment_id=$(gh pr view ${{ github.event.pull_request.html_url }} --json comments |\
+          jq -r 'first(.comments | .[] | select(.author.login = "github-actions") | select(.body | contains("COMMENT_FOR_TEST"))) | .id')
+          echo "Detected comment id: $comment_id"
+          if test -z "$comment_id" ; then
+            gh pr comment ${{ github.event.pull_request.html_url }} -F body.txt
+          else
+            gh api -X PATCH "repos/{owner}/{repo}/issues/comments/${comment_id}" -f body='@body.txt'
+          fi
       - name: Check reflog
         run: git reflog
       - name: Track all
