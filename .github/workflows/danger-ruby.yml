@@ -59,11 +59,12 @@ jobs:
 
           node_comment_id=$(gh pr view ${{ github.event.pull_request.html_url }} --json comments |\
           jq -r 'first(.comments | .[] | select(.author.login = "github-actions") | select(.body | contains("COMMENT_FOR_TEST"))) | .id')
-          comment_id=$(gh api /repos/{owner}/{repo}/issues/comments | jq -r 'first(.[] | select(.node_id = "$node_comment_id")) | .id')
-          echo "Detected comment id: ${node_comment_id}, ${comment_id}"
-          if test -z "$comment_id" ; then
+          echo "Detected comment id: ${node_comment_id}"
+          if test -z "$node_comment_id" ; then
             gh pr comment ${{ github.event.pull_request.html_url }} -F body.txt
           else
+            comment_id=$(gh api /repos/{owner}/{repo}/issues/comments | jq -r 'first(.[] | select(.node_id = "$node_comment_id")) | .id')
+            echo "$comment_id"
             gh api -X GET "/repos/{owner}/{repo}/issues/comments/${comment_id}"
             gh api -X PATCH "/repos/{owner}/{repo}/issues/comments/${comment_id}" -f body='@body.txt'
           fi
