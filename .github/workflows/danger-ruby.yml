@@ -66,7 +66,7 @@ jobs:
             comment_id=$(gh api /repos/{owner}/{repo}/issues/comments | jq -r '.[] | select(.node_id == "'$node_comment_id'") | .id')
             echo "$comment_id"
             gh api -X GET "/repos/{owner}/{repo}/issues/comments/${comment_id}"
-            gh api -X PATCH "/repos/{owner}/{repo}/issues/comments/${comment_id}" -f body=@body.txt
+            gh api -X PATCH "/repos/{owner}/{repo}/issues/comments/${comment_id}" -F 'body=@body.txt'
           fi
       - name: Check reflog
         run: git reflog
