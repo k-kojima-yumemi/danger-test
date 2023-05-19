@@ -57,9 +57,10 @@ jobs:
           Run URL: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
           EOF
 
-          comment_id=$(gh pr view ${{ github.event.pull_request.html_url }} --json comments |\
+          node_comment_id=$(gh pr view ${{ github.event.pull_request.html_url }} --json comments |\
           jq -r 'first(.comments | .[] | select(.author.login = "github-actions") | select(.body | contains("COMMENT_FOR_TEST"))) | .id')
-          echo "Detected comment id: $comment_id"
+          comment_id=$(gh api /repos/{owner}/{repo}/issues/comments | jq -r 'first(.[] | select(.node_id = "$node_comment_id")) | .id')
+          echo "Detected comment id: ${node_comment_id}, ${comment_id}"
           if test -z "$comment_id" ; then
             gh pr comment ${{ github.event.pull_request.html_url }} -F body.txt
           else
